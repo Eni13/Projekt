@@ -7,7 +7,7 @@ public partial class MainWindow
 
 	private global::Gtk.VBox vbox9;
 
-	private global::Gtk.Button buttonDodajFolder;
+	private global::Gtk.Button buttonDodajPDF;
 
 	private global::Gtk.Button sviPdfoviButton;
 
@@ -54,13 +54,13 @@ public partial class MainWindow
 		this.vbox9.Name = "vbox9";
 		this.vbox9.Spacing = 6;
 		// Container child vbox9.Gtk.Box+BoxChild
-		this.buttonDodajFolder = new global::Gtk.Button();
-		this.buttonDodajFolder.CanFocus = true;
-		this.buttonDodajFolder.Name = "buttonDodajFolder";
-		this.buttonDodajFolder.UseUnderline = true;
-		this.buttonDodajFolder.Label = global::Mono.Unix.Catalog.GetString("Dodaj PDF");
-		this.vbox9.Add(this.buttonDodajFolder);
-		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox9[this.buttonDodajFolder]));
+		this.buttonDodajPDF = new global::Gtk.Button();
+		this.buttonDodajPDF.CanFocus = true;
+		this.buttonDodajPDF.Name = "buttonDodajPDF";
+		this.buttonDodajPDF.UseUnderline = true;
+		this.buttonDodajPDF.Label = global::Mono.Unix.Catalog.GetString("Dodaj PDF");
+		this.vbox9.Add(this.buttonDodajPDF);
+		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox9[this.buttonDodajPDF]));
 		w1.Position = 0;
 		w1.Expand = false;
 		w1.Fill = false;
