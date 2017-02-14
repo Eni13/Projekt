@@ -9,11 +9,11 @@ namespace projektPdf
 
 		static BPPDF()
 		{
-			BP.otvoriKonekciju();
+			
 
 			//Kreiranje komande
 			SqliteCommand command = BP.konekcija.CreateCommand();
-
+			// ako tablica ne postoji, kreiraj novu tablicu 
 			command.CommandText = @"CREATE TABLE IF NOT EXISTS PDF (
 				id integer primary key autoincrement,
 				id_kategorija integer NOT NULL,
@@ -28,7 +28,7 @@ namespace projektPdf
 			//"Ciscenje" komande
 			command.Dispose();
 
-			BP.zatvoriKonekciju();
+
 		}
 
 
@@ -36,7 +36,7 @@ namespace projektPdf
 		//Funkcija koja sprema događaj koji joj je dan kao argument
 		public static void Spremi(Pdf pdf)
 		{
-			BP.otvoriKonekciju();
+			
 
 			//Kreiranje komande
 			SqliteCommand command = BP.konekcija.CreateCommand();
@@ -56,13 +56,11 @@ namespace projektPdf
 			//"Ciscenje" komande
 			command.Dispose();
 
-			BP.zatvoriKonekciju();
 		}
 
 		public static void Izbrisi(Pdf p)
 		{
-			BP.otvoriKonekciju();
-
+			
 			//Kreiranje komande
 			SqliteCommand command = BP.konekcija.CreateCommand();
 
@@ -76,14 +74,14 @@ namespace projektPdf
 			//"Ciscenje" komande
 			command.Dispose();
 
-			BP.zatvoriKonekciju();
+
 		}
 
 		public static List<Pdf> DohavtiSve()
 		{
-			BP.otvoriKonekciju();
+			
 
-			//Instanciranje liste u koju ce se spremiti svi dogadaji
+			//Instanciranje liste u koju ce se spremiti svi pdf-ovi
 			List<Pdf> lista = new List<Pdf>();
 
 			//Kreiranje komande
@@ -109,17 +107,22 @@ namespace projektPdf
 				string Path = (string)reader["path"];
 				string tag = (string)reader["tagovi"];
 
+				//kreiranje liste u kojoj će se sadžavati tagovi
 				List<string> tagovi = new List<string>();
 
+				// podjeli pročitane tagove u polje stringova, tagovi su odjeljeni zarezima
 				var tags = tag.Split(',');
+				// za svaki tag u tags
 				foreach (var t in tags)
 				{
+					// dodaj tag u prije kreiranu listu tagova
 					tagovi.Add(t);
 				}
-				Pdf temp = new Pdf(ime, Path, Id, null,tagovi);
+				//kreiraj novi pdf objekt
+				Pdf temp = new Pdf(ime, Path, Id, Kategorija.dohvatiPoId(idKategorije),tagovi);
 
 
-				//Umetanje dogadaja u tablicu
+				//Umetni objekt pdf u listu pdf-ova
 				lista.Add(temp);
 			}
 
@@ -127,15 +130,14 @@ namespace projektPdf
 			reader.Dispose();
 			command.Dispose();
 
-			BP.zatvoriKonekciju();
-
+		
 			//Vracanje prethodno instaciranje liste dogadaja koja sad sadrzi sve dogadaje iz baze podataka
 			return lista;
 		}
 
 		public static List<Pdf> DohvatiIzKategorije(Kategorija kategorija)
 		{
-			BP.otvoriKonekciju();
+			
 
 			//Instanciranje liste u koju ce se spremiti svi dogadaji
 			List<Pdf> lista = new List<Pdf>();
@@ -163,14 +165,19 @@ namespace projektPdf
 				string Path = (string)reader["path"];
 				string tag = (string)reader["tagovi"];
 
+				//kreiranje liste u kojoj će se sadžavati tagovi
 				List<string> tagovi = new List<string>();
 
+				// podjeli pročitane tagove u polje stringova, tagovi su odjeljeni zarezima
 				var tags = tag.Split(',');
+				// za svaki tag iz polja tagova(tags)
 				foreach (var t in tags)
 				{
+					// dodaj tag u prije kreiranu listu tagova
 					tagovi.Add(t);
 				}
-				Pdf temp = new Pdf(ime, Path, Id, null, tagovi);
+				//kreiraj novi objekt pdf-a
+				Pdf temp = new Pdf(ime, Path, Id, Kategorija.dohvatiPoId(idKategorije), tagovi);
 
 
 				//Umetanje dogadaja u tablicu
@@ -181,7 +188,7 @@ namespace projektPdf
 			reader.Dispose();
 			command.Dispose();
 
-			BP.zatvoriKonekciju();
+		
 
 			//Vracanje prethodno instaciranje liste dogadaja koja sad sadrzi sve dogadaje iz baze podataka
 			return lista;
