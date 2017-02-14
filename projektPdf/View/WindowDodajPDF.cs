@@ -23,8 +23,11 @@ namespace projektPdf
 
 		protected void spremi(object sender, EventArgs a)
 		{
-			var unos = new WindowUnosPDF(filechooserwidget2.Filename);
-			unos.Destroyed+=(sender1, e1) => this.Destroy();
+			if (filechooserwidget2.Filename.Substring(filechooserwidget2.Filename.Length - 3) == "pdf")
+			{
+				var unos = new WindowUnosPDF(filechooserwidget2.Filename);
+				unos.Destroyed += (sender1, e1) => this.Destroy();
+			}
 		}
 
 		protected void odustani(object sender, EventArgs a)
