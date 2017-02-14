@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 namespace projektPdf
 {
 	public class Pdf
@@ -6,12 +6,15 @@ namespace projektPdf
 		private long id;
 		private string naziv;
 		private string path;
-
-		public Pdf(string naziv, string path, long id)
+		public List<string> tagovi { get; }
+		public Kategorija kategorija { get; }
+		public Pdf(string naziv, string path, long id,Kategorija kategorija, List<string> tagovi)
 		{
 			this.naziv = naziv;
 			this.path = path;
 			this.id = id;
+			this.tagovi = tagovi;
+			this.kategorija = kategorija;
 		}
 
 		public string Naziv

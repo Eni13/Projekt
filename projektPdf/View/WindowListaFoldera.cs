@@ -6,7 +6,6 @@ namespace projektPdf
 {
 	public partial class WindowListaFoldera : Gtk.Window
 	{
-		public FolderNodeStore folderPresenter = new FolderNodeStore();
 
 		public WindowListaFoldera() :
 				base(Gtk.WindowType.Toplevel)
@@ -16,8 +15,7 @@ namespace projektPdf
 			buttonIzbrisi.Clicked += izbrisiFolder;
 			buttonOdustani.Clicked += odustani;
 
-			// Dodjeljivanje presentera nodeview-u
-			nodeview1.NodeStore = folderPresenter;
+
 
 			//Dodavanje stupaca koji ce se prikazivati u nodeview
 			nodeview1.AppendColumn("Putanja foldera", new CellRendererText(), "text", 0);

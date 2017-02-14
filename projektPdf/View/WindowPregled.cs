@@ -13,7 +13,8 @@ namespace projektPdf
 		{
 			this.Build();
 
-			bool flag = false;
+
+		/*	bool flag = false;	
 
 			DirectoryInfo d = new DirectoryInfo("C:\\temp");
 			FileInfo[] Files = d.GetFiles("*.jpg");
@@ -58,8 +59,9 @@ namespace projektPdf
 
 				vbox1.Add(temp);
 			}
+*/
 
-			Build();
+
 		}
 	}
 }

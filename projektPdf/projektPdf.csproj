@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -64,9 +63,7 @@
     <Reference Include="NReco.PdfRenderer">
       <HintPath>..\packages\NReco.PdfRenderer.1.0.1\lib\net20\NReco.PdfRenderer.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Posix">
-      <HintPath>..\packages\Mono.Posix-4.5.4.5.0\lib\net45\Mono.Posix.dll</HintPath>
-    </Reference>
+    <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -78,21 +75,21 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Folder.cs" />
     <Compile Include="Model\BP.cs" />
-    <Compile Include="Model\BPFolder.cs" />
+    <Compile Include="Model\BPPDF.cs" />
     <Compile Include="Presenter\PdfNode.cs" />
     <Compile Include="Presenter\PdfNodeStore.cs" />
     <Compile Include="Model\Pdf.cs" />
     <Compile Include="View\MainWindow.cs" />
-    <Compile Include="View\WindowDodajFolder.cs" />
-    <Compile Include="gtk-gui\projektPdf.WindowDodajFolder.cs" />
-    <Compile Include="View\WindowListaFoldera.cs" />
-    <Compile Include="gtk-gui\projektPdf.WindowListaFoldera.cs" />
-    <Compile Include="Presenter\FolderNode.cs" />
-    <Compile Include="Presenter\FolderNodeStore.cs" />
-    <Compile Include="View\WindowPregled.cs" />
-    <Compile Include="gtk-gui\projektPdf.WindowPregled.cs" />
+    <Compile Include="View\WindowDodajPDF.cs" />
+    <Compile Include="Model\Kategorija.cs" />
+    <Compile Include="Model\BPKategorija.cs" />
+    <Compile Include="gtk-gui\projektPdf.WindowDodajPDF.cs" />
+    <Compile Include="View\WindowUnosPDF.cs" />
+    <Compile Include="gtk-gui\projektPdf.WindowUnosPDF.cs" />
+    <Compile Include="Presenter\KategorijaListStore.cs" />
+    <Compile Include="View\WindowNovaKategorija.cs" />
+    <Compile Include="gtk-gui\projektPdf.WindowNovaKategorija.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

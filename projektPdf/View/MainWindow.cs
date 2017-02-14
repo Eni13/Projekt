@@ -15,44 +15,34 @@ public partial class MainWindow : Gtk.Window
 	{
 		Build();
 
-		buttonDodajFolder.Clicked += dodajFolder;
-		buttonListaFoldera.Clicked += listaFolder;
+		buttonDodajFolder.Clicked += dodajPdf;
+
 		buttonOtvori.Clicked += otvoriPdf;
 		buttonIzbrisi.Clicked += izbrisiPdf;
 
-		combobox4.Changed += dohvatiSortirano;
 
-		//pdfPresenter = new PdfNodeStore();
+		sviPdfoviButton.Clicked+=(sender, e) => dohvatiPdf(sender,e);
 
-		dohvatiPdf(null, null);
 
 		//Dodjeljivanje presentera nodeview-u
 		nodeview1.NodeStore = pdfPresenter;
 
 		//Dodavanje stupaca koji ce se prikazivati u nodeview
 		nodeview1.AppendColumn("Naziv", new CellRendererText(), "text", 0);
+
+		// dodaje kategorije u obliku gumbova
+		generirajKategorije();
+
+		pretraziButton.Clicked+=(sender, e) => pretrazi();
 	}
 
 	protected void dohvatiPdf(object sender, EventArgs a)
 	{
-		List<Folder> listaFoldera = BPFolder.DohavtiSve();
+		List<Pdf> lista = BPPDF.DohavtiSve();
 
 		pdfPresenter.Clear();
+		pdfPresenter.dodajVise(lista);
 
-		foreach (var i in listaFoldera)
-		{
-			DirectoryInfo d = new DirectoryInfo(i.Path);//Assuming Test is your Folder
-			FileInfo[] Files = d.GetFiles("*.pdf"); //Getting Text files
-			string str = "";
-			foreach (FileInfo file in Files)
-			{
-				str = file.Name;
-
-				Pdf temp = new Pdf(str.Substring(0, str.Length - 4), i.Path + "\\" + str, i.Id);
-
-				pdfPresenter.dodajPdf(temp);
-			}
-		}
 	}
 
 	protected void otvoriPdf(object sender, EventArgs a)
@@ -61,10 +51,9 @@ public partial class MainWindow : Gtk.Window
 		PdfNode pdfSelected = nodeview1.NodeSelection.SelectedNode as PdfNode;
 		if (pdfSelected == null)
 			return;
-
-		var windowPregled = new WindowPregled(pdfSelected.path, pdfSelected.id, pdfSelected.naziv);
+		//otvaranje pdf-a u defaultno podešenom programu
+		System.Diagnostics.Process.Start(@pdfSelected.path);
 	}
-
 	protected async void izbrisiPdf(object sender, EventArgs a)
 	{
 		//Dohacanje odaberenog dogadaja
@@ -82,62 +71,44 @@ public partial class MainWindow : Gtk.Window
 
 		await Task.Delay(TimeSpan.FromSeconds(1));
 
-		dohvatiPdf(null, null);
+		//izbrisi prikaz izbrisanog pdf-a
+		pdfPresenter.RemoveNode(pdfSelected);
+	}
+	private void generirajKategorije()
+	{
+		var vbox = new VBox(false,5);
+		foreach (var kat in Kategorija.kategorije)
+		{
+			var button = new Button(kat.Naziv);
+			button.Clicked += (sender, e) => pdfPresenter.dohvatiPdfUKategoriji(kat);
+			vbox.Add(button);
+
+		}
+		scrolledwindow1.AddWithViewport(vbox);
+		scrolledwindow1.ShowAll();
 	}
 
-	protected void dohvatiSortirano(object sender, EventArgs a)
+
+
+	protected void dodajPdf(object sender, EventArgs a)
 	{
-		List<Folder> listaFoldera = BPFolder.DohavtiSve();
-		List<Pdf> listaPdf = new List<Pdf>();
-
-		foreach (var i in listaFoldera)
-		{
-			DirectoryInfo d = new DirectoryInfo(i.Path);//Assuming Test is your Folder
-			FileInfo[] Files = d.GetFiles("*.pdf"); //Getting Text files
-			string str = "";
-			foreach (FileInfo file in Files)
-			{
-				str = file.Name;
-
-				Pdf temp = new Pdf(str.Substring(0, str.Length - 4), i.Path + "\\" + str, i.Id);
-
-				listaPdf.Add(temp);
-			}
-		}
-
-		ComboBox comboBoxSort = sender as ComboBox;
-
-		switch (comboBoxSort.ActiveText)
-		{
-			case "Abecedno (uzlazno)":
-				listaPdf = listaPdf.OrderBy(s => s.Naziv).ToList();
-				break;
-			case "Abecedno (silazno)":
-				listaPdf = listaPdf.OrderByDescending(s => s.Naziv).ToList();
-				break;
-		}
-
-		pdfPresenter.Clear();
-
-		foreach (var i in listaPdf)
-		{
-			pdfPresenter.dodajPdf(i);
-		}
-	}
-
-	protected void dodajFolder(object sender, EventArgs a)
-	{
-		var dodajFolderWindow = new WindowDodajFolder();
+		var dodajFolderWindow = new WindowDodajPDF();
 
 		dodajFolderWindow.Destroyed += dohvatiPdf;
 	}
-
-	protected void listaFolder(object sender, EventArgs a)
+	private void pretrazi()
 	{
-		var listaFolderWindow = new WindowListaFoldera();
+		if (entry2.Text.Length == 0) dohvatiPdf(null, null);
+		System.Collections.Generic.List<string> tagovi = new System.Collections.Generic.List<string>();
 
-		listaFolderWindow.Destroyed += dohvatiPdf;
+		var tags = entry2.Text.Split(',');
+		foreach (var t in tags)
+		{
+			tagovi.Add(t.Trim());
+		}
+		pdfPresenter.dohvatiPoTagovima(tagovi);
 	}
+
 
 	protected void OnDeleteEvent(object sender, DeleteEventArgs a)
 	{
